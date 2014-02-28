@@ -20,11 +20,8 @@
 #ifndef UTLALGORITHM_HPP
 #define UTLALGORITHM_HPP
 
-#include <cassert>
-
 #include <type/Types.hpp>
 #include <type/Traits.hpp>
-#include <type/Util.hpp>
 
 
 namespace utl
@@ -37,12 +34,6 @@ namespace utl
 
   template<typename T>
   void swap(T& first, T& second);
-
-  template<typename T, size_t Bits>
-  T rotateLeft(T value, size_t shift);
-
-  template<typename T, size_t Bits>
-  T rotateRight(T value, size_t shift);
 
   //template<typename IteratorT>
   //difference_t difference(IteratorT first, IteratorT second);
@@ -106,49 +97,6 @@ namespace utl
     T temp = first;
     first  = second;
     second = temp;
-  }
-
-  template<typename T, size_t Bits>
-  struct Mask
-  {
-    /**
-     * Calculating of the mask for the given number of bits by example
-     * Bits = 5 => goal is mask 011111b
-     * - Bits - 1 => 4
-     * - 1 << 4   => 16 = 010000b
-     * - 16 - 1   => 15 = 001111b
-     * - 15 << 1  => 30 = 011110b
-     * - 30 | 1   => 31 = 011111b
-     */
-    static T const value = (((static_cast<T>(1 << (Bits - 1)) - 1) << 1) | 1);
-  };
-
-  /**
-   * @param value
-   * @param shift
-   */
-  template<typename T, size_t Bits>
-  T rotateLeft(T value, size_t shift)
-  {
-    assert(Bits  <= typ::typeBits(value));
-    assert(shift <= typ::typeBits(value));
-    assert((value & Mask<T, Bits>::value) == value);
-
-    return ((value << shift) | (value >> (Bits - shift))) & Mask<T, Bits>::value;
-  }
-
-  /**
-   * @param value
-   * @param shift
-   */
-  template<typename T, size_t Bits>
-  T rotateRight(T value, size_t shift)
-  {
-    assert(Bits  <= typ::typeBits(value));
-    assert(shift <= typ::typeBits(value));
-    assert((value & Mask<T, Bits>::value) == value);
-
-    return ((value >> shift) | (value << (Bits - shift))) & Mask<T, Bits>::value;
   }
 
   /**

@@ -1,4 +1,4 @@
-// Test.cpp
+// TestBits.cpp
 
 /***************************************************************************
  *   Copyright (C) 2014 Daniel Mueller (deso@posteo.net)                   *
@@ -17,30 +17,41 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include <iostream>
-
-#include <test/TestSuite.hpp>
-#include <test/DefaultResult.hpp>
+#include <util/Bits.hpp>
 
 #include "TestBits.hpp"
-#include "TestAlgorithm.hpp"
 
 
-int main()
+namespace test
 {
-  tst::DefaultResult<std::ostream> result(std::cout, true);
-  tst::TestSuite                   suite;
+  TestBits::TestBits()
+    : tst::TestCase<TestBits>(*this, "TestBits")
+  {
+    add(&TestBits::testRotateLeft1);
+    add(&TestBits::testRotateRight1);
+  }
 
-  suite.add(tst::createTestCase<test::TestBits>());
-  suite.add(tst::createTestCase<test::TestAlgorithm>());
+  void TestBits::testRotateLeft1(tst::TestResult& result)
+  {
+    ASSERT((utl::rotateLeft<uint32_t, 32>(1, 32) == 1));
+    ASSERT((utl::rotateLeft<uint32_t, 32>(2, 32) == 2));
+    ASSERT((utl::rotateLeft<uint32_t, 20>(1, 20) == 1));
+    ASSERT((utl::rotateLeft<uint32_t, 20>(2, 20) == 2));
 
-  std::cout << "Running Tests...\n";
+    ASSERT((utl::rotateLeft<uint32_t, 20>(0, 1)  == 0));
+    ASSERT((utl::rotateLeft<uint32_t, 20>(0, 2)  == 0));
 
-  suite.run(result);
+    ASSERT((utl::rotateLeft<uint32_t, 20>(7, 2)  == 28));
+    ASSERT((utl::rotateLeft<uint32_t, 20>(7, 2)  == 28));
+    ASSERT((utl::rotateLeft<uint32_t, 20>(1 << 19, 1) == 1));
+  }
 
-  std::cout << "-----------------------------\n";
-  std::cout << "Summary:\n";
+  void TestBits::testRotateRight1(tst::TestResult& result)
+  {
+    ASSERT((utl::rotateRight<uint32_t, 32>(1, 32) == 1));
+    ASSERT((utl::rotateRight<uint32_t, 32>(2, 32) == 2));
 
-  result.printSummary();
-  return 0;
+    ASSERT((utl::rotateRight<uint32_t, 19>(1, 1) == 1 << 18));
+    ASSERT((utl::rotateRight<uint32_t, 19>(1, 2) == 1 << 17));
+  }
 }

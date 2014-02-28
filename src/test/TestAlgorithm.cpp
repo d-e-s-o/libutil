@@ -31,8 +31,6 @@ namespace test
       destination_begin_(destination_),
       destination_end_(destination_ + SIZE)
   {
-    add(&TestAlgorithm::testRotateLeft1);
-    add(&TestAlgorithm::testRotateRight1);
     add(&TestAlgorithm::testFill);
     add(&TestAlgorithm::testFind);
     add(&TestAlgorithm::testFindNot);
@@ -50,30 +48,6 @@ namespace test
 
     for (int* it = destination_begin_; it != destination_end_; ++it)
       *it = 0;
-  }
-
-  void TestAlgorithm::testRotateLeft1(tst::TestResult& result)
-  {
-    ASSERT((utl::rotateLeft<uint32_t, 32>(1, 32) == 1));
-    ASSERT((utl::rotateLeft<uint32_t, 32>(2, 32) == 2));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(1, 20) == 1));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(2, 20) == 2));
-
-    ASSERT((utl::rotateLeft<uint32_t, 20>(0, 1)  == 0));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(0, 2)  == 0));
-
-    ASSERT((utl::rotateLeft<uint32_t, 20>(7, 2)  == 28));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(7, 2)  == 28));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(1 << 19, 1) == 1));
-  }
-
-  void TestAlgorithm::testRotateRight1(tst::TestResult& result)
-  {
-    ASSERT((utl::rotateRight<uint32_t, 32>(1, 32) == 1));
-    ASSERT((utl::rotateRight<uint32_t, 32>(2, 32) == 2));
-
-    ASSERT((utl::rotateRight<uint32_t, 19>(1, 1) == 1 << 18));
-    ASSERT((utl::rotateRight<uint32_t, 19>(1, 2) == 1 << 17));
   }
 
   void TestAlgorithm::testFill(tst::TestResult& result)
