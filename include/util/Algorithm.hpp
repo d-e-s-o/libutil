@@ -26,14 +26,6 @@
 
 namespace utl
 {
-  template<typename T>
-  T min(T first, T second);
-
-  template<typename T>
-  T max(T first, T second);
-
-  template<typename T>
-  void swap(T& first, T& second);
 
   //template<typename IteratorT>
   //difference_t difference(IteratorT first, IteratorT second);
@@ -66,39 +58,6 @@ namespace utl
 
 namespace utl
 {
-  /**
-   * @param first
-   * @param second
-   */
-  template<typename T>
-  T min(T first, T second)
-  {
-    return first < second ? first : second;
-  }
-
-  /**
-   * @param first
-   * @param second
-   */
-  template<typename T>
-  T max(T first, T second)
-  {
-    return first > second ? first : second;
-  }
-
-  /**
-   * This function swaps the contents of 'first' with that of 'second'.
-   * @param first
-   * @param second
-   */
-  template<typename T>
-  void swap(T& first, T& second)
-  {
-    T temp = first;
-    first  = second;
-    second = temp;
-  }
-
   /**
    * @param it iterator to check if it is in the range [begin, end]
    * @param begin begin of range to check for inclusion of it
