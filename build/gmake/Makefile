@@ -31,6 +31,7 @@ DEPENDENCIES_libutil_test =
 SRC_ROOT_libutil_test = $(TARGET_DIR_libutil_test)/../../src/test/
 SRC_CXX_libutil_test  = Test.cpp\
                         TestBits.cpp\
+                        TestString.cpp\
                         TestAlgorithm.cpp
 
 CXXFLAGS_libutil_test = -I$(TARGET_DIR_libutil_test)/../../../libtype/include/\

@@ -1,4 +1,4 @@
-// Test.cpp
+// TestString.hpp
 
 /***************************************************************************
  *   Copyright (C) 2014 Daniel Mueller (deso@posteo.net)                   *
@@ -17,32 +17,28 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include <iostream>
+#ifndef UTLTESTSTRING_HPP
+#define UTLTESTSTRING_HPP
 
-#include <test/TestSuite.hpp>
-#include <test/DefaultResult.hpp>
-
-#include "TestBits.hpp"
-#include "TestString.hpp"
-#include "TestAlgorithm.hpp"
+#include <test/TestCase.hpp>
 
 
-int main()
+namespace test
 {
-  tst::DefaultResult<std::ostream> result(std::cout, true);
-  tst::TestSuite                   suite;
+  /**
+   *
+   */
+  class TestString: public tst::TestCase<TestString>
+  {
+  public:
+    TestString();
 
-  suite.add(tst::createTestCase<test::TestBits>());
-  suite.add(tst::createTestCase<test::TestString>());
-  suite.add(tst::createTestCase<test::TestAlgorithm>());
+    void testLength(tst::TestResult& result);
 
-  std::cout << "Running Tests...\n";
-
-  suite.run(result);
-
-  std::cout << "-----------------------------\n";
-  std::cout << "Summary:\n";
-
-  result.printSummary();
-  return 0;
+    void testCompareLess(tst::TestResult& result);
+    void testCompareEqual(tst::TestResult& result);
+  };
 }
+
+
+#endif
