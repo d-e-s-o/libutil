@@ -24,10 +24,10 @@
 namespace utl
 {
   template<typename T>
-  T min(T first, T second);
+  constexpr T min(T first, T second);
 
   template<typename T>
-  T max(T first, T second);
+  constexpr T max(T first, T second);
 
   template<typename T>
   void swap(T& first, T& second);
@@ -41,7 +41,7 @@ namespace utl
    * @param second
    */
   template<typename T>
-  T min(T first, T second)
+  constexpr T min(T first, T second)
   {
     return first < second ? first : second;
   }
@@ -51,7 +51,7 @@ namespace utl
    * @param second
    */
   template<typename T>
-  T max(T first, T second)
+  constexpr T max(T first, T second)
   {
     return first > second ? first : second;
   }
