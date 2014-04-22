@@ -33,10 +33,10 @@ namespace utl
   //difference_t difference(IteratorT first, IteratorT second);
 
   template<typename InputIteratorT, typename OutputIteratorT>
-  void copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination);
+  OutputIteratorT copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination);
 
   template<typename InputIteratorT, typename OutputIteratorT, typename CopyT>
-  void copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination, CopyT copy);
+  OutputIteratorT copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination, CopyT copy);
 
   template<typename IteratorT, typename T>
   void fill(IteratorT begin, IteratorT end, T const& value);
@@ -105,7 +105,8 @@ namespace utl
    *       version) could make better use of it
    */
   template<typename InputIteratorT, typename OutputIteratorT, typename CopyT>
-  inline void simpleCopy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination, CopyT copy)
+  inline OutputIteratorT simpleCopy(InputIteratorT begin, InputIteratorT end,
+                                    OutputIteratorT destination, CopyT copy)
   {
     // if destination is not in [begin, end) (the ranges do not overlap [general case]), simply copy
     // element by element in forward order, otherwise we copy backwards
@@ -117,23 +118,29 @@ namespace utl
       // copy element by element
       while (begin != end)
         copy(begin++, destination++);
+
+      return destination;
     }
     else
     {
-      InputIteratorT rbegin  = end - 1;
-      InputIteratorT rend    = begin - 1;
-      OutputIteratorT rdest  = destination + ((end - 1) - begin);
+      InputIteratorT  rbegin  = end - 1;
+      InputIteratorT  rend    = begin - 1;
+      OutputIteratorT rout    = destination + ((end - 1) - begin);
+      OutputIteratorT out_end = rout + 1;
 
       while (rbegin != rend)
-        copy(rbegin--, rdest--);
+        copy(rbegin--, rout--);
+
+      return out_end;
     }
   }
 
   template<typename InputIteratorT, typename OutputIteratorT>
-  inline void simpleCopy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination)
+  inline OutputIteratorT simpleCopy(InputIteratorT begin, InputIteratorT end,
+                                    OutputIteratorT destination)
   {
     auto assign = [](InputIteratorT in, OutputIteratorT out) { *out = *in; };
-    simpleCopy(begin, end, destination, assign);
+    return simpleCopy(begin, end, destination, assign);
   }
 
   /**
@@ -141,18 +148,19 @@ namespace utl
    *       however this is not as trivial as it might seem at first glance
    */
   template<typename InputIteratorT, typename OutputIteratorT>
-  void copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination)
+  inline OutputIteratorT copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination)
   {
-    simpleCopy(begin, end, destination);
+    return simpleCopy(begin, end, destination);
   }
 
   /**
    *
    */
   template<typename InputIteratorT, typename OutputIteratorT, typename CopyT>
-  void copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination, CopyT copy)
+  inline OutputIteratorT copy(InputIteratorT begin, InputIteratorT end,
+                              OutputIteratorT destination, CopyT copy)
   {
-    simpleCopy(begin, end, destination, copy);
+    return simpleCopy(begin, end, destination, copy);
   }
 
   /**
@@ -160,7 +168,7 @@ namespace utl
    * better performance and can be always used for POD like types.
    */
   template<>
-  inline void copy(byte_t const* begin, byte_t const* end, byte_t* destination)
+  inline byte_t* copy(byte_t const* begin, byte_t const* end, byte_t* destination)
   {
     // number of bytes to copy in "one rush"
     int const BLOCK_SIZE = 16 * sizeof(ulong_t);
@@ -234,9 +242,10 @@ namespace utl
         while (begin != end)
           *destination++ = *begin++;
       }
+      return destination;
     }
     else
-      simpleCopy(begin, end, destination);
+      return simpleCopy(begin, end, destination);
   }
 
   /**
