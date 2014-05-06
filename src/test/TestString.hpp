@@ -37,6 +37,8 @@ namespace test
 
     void testCompareLess(tst::TestResult& result);
     void testCompareEqual(tst::TestResult& result);
+
+    void testCopy(tst::TestResult& result);
   };
 }
 

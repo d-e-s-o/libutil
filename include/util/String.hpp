@@ -23,6 +23,9 @@
 #include <cassert>
 
 #include <type/Types.hpp>
+#include <type/Misc.hpp>
+
+#include "util/Algorithm.hpp"
 
 
 namespace utl
@@ -32,6 +35,9 @@ namespace utl
 
   template<typename CharT>
   int compare(CharT const* string1, CharT const* string2);
+
+  template<typename CharT>
+  CharT* copy(CharT const* src, CharT* dst, size_t count);
 }
 
 
@@ -90,6 +96,40 @@ namespace utl
 
     // both are equal
     return 0;
+  }
+
+  /**
+   * @param src source string
+   * @param dst destination buffer
+   * @param count number of elements in destination buffer
+   * @return pointer right after the last element copied to the destination buffer
+   * @note this function behaves differently than strncpy in two ways:
+   *       - it always creates a zero terminated string
+   *       - it does not fill remaining (untouched) elements (up to 'count') with zero
+   * @todo if required, add a faster function that only requires one pass over the source string
+   *       (and not two as with our separate length() invocation)
+   */
+  template<typename CharT>
+  CharT* copy(CharT const* src, CharT* dst, size_t count)
+  {
+    // add one element to account for zero terminating byte
+    auto len = length(src) + 1;
+    // we must not copy more than the destination buffer can hold
+    auto max = typ::min(count, len);
+    auto end = copy(src, src + max, dst);
+
+    // ensure zero termination in any case: in the normal case we did copy the zero terminating byte
+    // from the source buffer; however, if the source buffer exceeds the destination buffer's
+    // capacity, we have to make sure to zero out the last valid byte of the destination buffer
+    if (len > count)
+    {
+      // size_t is unsigned -- take care not to cause an overflow
+      if (count > 0)
+        dst[count - 1] = '\0';
+      else
+        dst[0] = '\0';
+    }
+    return end;
   }
 }
 

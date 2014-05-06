@@ -37,6 +37,7 @@ namespace test
     add(&TestString::testLength);
     add(&TestString::testCompareLess);
     add(&TestString::testCompareEqual);
+    add(&TestString::testCopy);
   }
 
   void TestString::testLength(tst::TestResult& result)
@@ -72,5 +73,29 @@ namespace test
 
     ASSERT(utl::compare(string1, string1) == 0);
     ASSERT(utl::compare(string2, string2) == 0);
+  }
+
+  /**
+   * @todo need more test cases!
+   */
+  void TestString::testCopy(tst::TestResult& result)
+  {
+    char buffer[12] = {};
+    size_t size = sizeof(buffer);
+
+    ASSERT(utl::copy("", buffer, size) == buffer + 1);
+    ASSERT(utl::compare(buffer, "") == 0);
+
+    ASSERT(utl::copy("abc", buffer, size) == buffer + 4);
+    ASSERT(utl::compare(buffer, "abc") == 0);
+
+    ASSERT(utl::copy("abcdefghijk", buffer, size) == buffer + size);
+    ASSERT(utl::compare(buffer, "abcdefghijk") == 0);
+
+    ASSERT(utl::copy("abcdefghijkl", buffer, size) == buffer + size);
+    ASSERT(utl::compare(buffer, "abcdefghijk") == 0);
+
+    ASSERT(utl::copy("abcdefghijklmnopqrst", buffer, size) == buffer + size);
+    ASSERT(utl::compare(buffer, "abcdefghijk") == 0);
   }
 }
