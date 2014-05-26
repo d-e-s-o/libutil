@@ -20,8 +20,6 @@
 #ifndef UTLBITS_HPP
 #define UTLBITS_HPP
 
-#include <cassert>
-
 #include <type/Types.hpp>
 #include <type/Util.hpp>
 
@@ -29,10 +27,10 @@
 namespace utl
 {
   template<typename T, size_t Bits>
-  T rotateLeft(T value, size_t shift);
+  constexpr T rotateLeft(T value, size_t shift);
 
   template<typename T, size_t Bits>
-  T rotateRight(T value, size_t shift);
+  constexpr T rotateRight(T value, size_t shift);
 }
 
 
@@ -42,13 +40,16 @@ namespace utl
   struct Mask
   {
     /**
-     * Calculating of the mask for the given number of bits by example
+     * Calculation of the mask for the given number of bits by example
      * Bits = 5 => goal is mask 011111b
      * - Bits - 1 => 4
      * - 1 << 4   => 16 = 010000b
      * - 16 - 1   => 15 = 001111b
      * - 15 << 1  => 30 = 011110b
      * - 30 | 1   => 31 = 011111b
+     * @note 'Bits' might equal the number of bits of the given data type; this means we cannot
+     *       safely assume that we can always perform 'Bit' shifts, so the algorithm is slightly
+     *       more complicated and we only shift by 'Bit'-1 initially
      */
     static T const value = (((static_cast<T>(1 << (Bits - 1)) - 1) << 1) | 1);
   };
@@ -59,12 +60,13 @@ namespace utl
    * @param shift amount of bit rotations to apply
    */
   template<typename T, size_t Bits>
-  T rotateLeft(T value, size_t shift)
+  constexpr T rotateLeft(T value, size_t shift)
   {
-    assert(Bits  <= typ::typeBits(value));
-    assert(shift <= typ::typeBits(value));
-    assert((value & Mask<T, Bits>::value) == value);
-
+    // the following checks can no longer be used for a constexpr function; the invariants have to
+    // be enforced by the caller
+    //assert(Bits  <= typ::typeBits(value));
+    //assert(shift <= typ::typeBits(value));
+    //assert((value & Mask<T, Bits>::value) == value);
     return ((value << shift) | (value >> (Bits - shift))) & Mask<T, Bits>::value;
   }
 
@@ -73,12 +75,13 @@ namespace utl
    * @param shift amount of bit rotations to apply
    */
   template<typename T, size_t Bits>
-  T rotateRight(T value, size_t shift)
+  constexpr T rotateRight(T value, size_t shift)
   {
-    assert(Bits  <= typ::typeBits(value));
-    assert(shift <= typ::typeBits(value));
-    assert((value & Mask<T, Bits>::value) == value);
-
+    // the following checks can no longer be used for a constexpr function; the invariants have to
+    // be enforced by the caller
+    //assert(Bits  <= typ::typeBits(value));
+    //assert(shift <= typ::typeBits(value));
+    //assert((value & Mask<T, Bits>::value) == value);
     return ((value >> shift) | (value << (Bits - shift))) & Mask<T, Bits>::value;
   }
 }
