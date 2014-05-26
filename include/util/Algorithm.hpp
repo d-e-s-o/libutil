@@ -21,6 +21,7 @@
 #define UTLALGORITHM_HPP
 
 #include <type/Types.hpp>
+#include <type/Move.hpp>
 #include <type/Traits.hpp>
 
 
@@ -31,6 +32,9 @@ namespace utl
 
   //template<typename IteratorT>
   //difference_t difference(IteratorT first, IteratorT second);
+
+  template<typename InputIteratorT, typename OutputIteratorT>
+  OutputIteratorT move(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination);
 
   template<typename InputIteratorT, typename OutputIteratorT>
   OutputIteratorT copy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination);
@@ -155,6 +159,19 @@ namespace utl
                                     OutputIteratorT destination)
   {
     auto assign = [](InputIteratorT in, OutputIteratorT out) { *out = *in; };
+    return simpleCopy(begin, end, destination, assign);
+  }
+
+  /**
+   * @param begin iterator to begin of input region
+   * @param end iterator to end of input region (pointing right after last element)
+   * @param destination iterator to begin of output region
+   * @return iterator pointing right after last element copied to output region
+   */
+  template<typename InputIteratorT, typename OutputIteratorT>
+  inline OutputIteratorT move(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination)
+  {
+    auto assign = [](InputIteratorT in, OutputIteratorT out) { *out = typ::move(*in); };
     return simpleCopy(begin, end, destination, assign);
   }
 
