@@ -70,15 +70,32 @@ namespace utl
    *       fail for all other types -- fix this!
    */
   template<typename IteratorT>
-  bool includesImpl(IteratorT begin, IteratorT end, IteratorT it)
+  constexpr bool includesImpl(IteratorT begin, IteratorT end, IteratorT it)
   {
     return begin <= it && it <= end;
   }
 
+  /**
+   *
+   */
   template<typename Iterator1T, typename Iterator2T>
-  bool includesImpl(Iterator1T begin, Iterator1T end, Iterator2T it)
+  constexpr bool includesImpl(Iterator1T begin, Iterator1T end, Iterator2T it)
   {
     return false;
+  }
+
+  namespace impl
+  {
+    /**
+     * @param t some value
+     * @return the given value
+     * @todo move into libtype or a more publicly accessible header once required somewhere else
+     */
+    template<typename T>
+    constexpr T const& removeRvalueReference(T&& t)
+    {
+      return t;
+    }
   }
 
   /**
@@ -89,15 +106,13 @@ namespace utl
   template<typename Iterator1T, typename Iterator2T>
   bool includes(Iterator1T begin, Iterator1T end, Iterator2T it)
   {
-    if (typ::IsBuiltIn<Iterator1T>::Value && typ::IsBuiltIn<Iterator2T>::Value)
-    {
-      typedef typename typ::MakeConst<Iterator1T>::Type T1;
-      typedef typename typ::MakeConst<Iterator2T>::Type T2;
+    typedef typename typ::RemoveReference<decltype(*begin)>::Type T1;
+    typedef typename typ::RemoveReference<decltype(*it)>::Type T2;
 
-      return includesImpl(static_cast<T1>(begin), static_cast<T1>(end), static_cast<T2>(it));
-    }
-    else
-      return includesImpl(begin, end, it);
+    T1 const* new_begin = &impl::removeRvalueReference(*begin);
+    T1 const* new_end   = &impl::removeRvalueReference(*end);
+    T2 const* new_it    = &impl::removeRvalueReference(*it);
+    return includesImpl(new_begin, new_end, new_it);
   }
 
   /**

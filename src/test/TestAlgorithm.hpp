@@ -35,6 +35,9 @@ namespace test
   public:
     TestAlgorithm();
 
+    void testIncludes1(tst::TestResult& result);
+    void testIncludes2(tst::TestResult& result);
+
     void testFill(tst::TestResult& result);
 
     void testFind(tst::TestResult& result);

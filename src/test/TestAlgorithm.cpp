@@ -24,6 +24,47 @@
 
 namespace test
 {
+  namespace
+  {
+    /**
+     * A class representing some iterator used for testing correct behavior of the 'includes'
+     * function in conjunction with iterators that might just wrap built-in types.
+     */
+    template<typename T>
+    struct Iterator
+    {
+      /**
+       * @param pointer some pointer
+       */
+      Iterator(T* pointer)
+        : pointer_(pointer)
+      {
+      }
+
+      /**
+       * @return dereferenced pointer
+       */
+      T& operator *() const
+      {
+        return *pointer_;
+      }
+
+      T* pointer_;
+    };
+
+
+    /**
+     * @param pointer some pointer
+     * @return iterator object wrapping the given pointer
+     */
+    template<typename T>
+    Iterator<T> iterator(T* pointer)
+    {
+      return Iterator<T>(pointer);
+    }
+  }
+
+
   TestAlgorithm::TestAlgorithm()
     : tst::TestCase<TestAlgorithm>(*this, "TestAlgorithm"),
       source_begin_(source_),
@@ -31,6 +72,8 @@ namespace test
       destination_begin_(destination_),
       destination_end_(destination_ + SIZE)
   {
+    add(&TestAlgorithm::testIncludes1);
+    add(&TestAlgorithm::testIncludes2);
     add(&TestAlgorithm::testFill);
     add(&TestAlgorithm::testFind);
     add(&TestAlgorithm::testFindNot);
@@ -48,6 +91,31 @@ namespace test
 
     for (int* it = destination_begin_; it != destination_end_; ++it)
       *it = 0;
+  }
+
+  void TestAlgorithm::testIncludes1(tst::TestResult& result)
+  {
+    ASSERT( utl::includes(source_begin_, source_end_, source_begin_));
+    ASSERT( utl::includes(source_begin_, source_end_, source_begin_ + 1));
+    ASSERT( utl::includes(source_begin_, source_end_, source_end_));
+    ASSERT(!utl::includes(source_begin_, source_end_, source_end_ + 1));
+  }
+
+  void TestAlgorithm::testIncludes2(tst::TestResult& result)
+  {
+    auto begin  = iterator(source_begin_);
+    auto middle = iterator(source_begin_ + 10);
+    auto end    = iterator(source_end_);
+    auto after  = iterator(source_end_ + 1);
+
+    ASSERT( utl::includes(source_begin_, source_end_, begin));
+    ASSERT( utl::includes(source_begin_, source_end_, middle));
+    ASSERT( utl::includes(source_begin_, source_end_, end));
+    ASSERT(!utl::includes(source_begin_, source_end_, after));
+
+    ASSERT( utl::includes(begin, end, source_begin_));
+    ASSERT( utl::includes(begin, end, source_end_));
+    ASSERT(!utl::includes(begin, end, source_end_ + 1));
   }
 
   void TestAlgorithm::testFill(tst::TestResult& result)
