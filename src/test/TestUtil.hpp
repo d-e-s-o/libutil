@@ -1,7 +1,7 @@
-// Test.cpp
+// TestUtil.hpp
 
 /***************************************************************************
- *   Copyright (C) 2014 Daniel Mueller (deso@posteo.net)                   *
+ *   Copyright (C) 2013-2014 Daniel Mueller (deso@posteo.net)              *
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,34 +17,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include <iostream>
+#ifndef TYPTESTUTIL_HPP
+#define TYPTESTUTIL_HPP
 
-#include <test/TestSuite.hpp>
-#include <test/DefaultResult.hpp>
-
-#include "TestUtil.hpp"
-#include "TestBits.hpp"
-#include "TestString.hpp"
-#include "TestAlgorithm.hpp"
+#include <test/TestCase.hpp>
 
 
-int main()
+namespace test
 {
-  tst::DefaultResult<std::ostream> result(std::cout, true);
-  tst::TestSuite                   suite;
+  class TestUtil: public tst::TestCase<TestUtil>
+  {
+  public:
+    TestUtil();
 
-  suite.add(tst::createTestCase<test::TestUtil>());
-  suite.add(tst::createTestCase<test::TestBits>());
-  suite.add(tst::createTestCase<test::TestString>());
-  suite.add(tst::createTestCase<test::TestAlgorithm>());
-
-  std::cout << "Running Tests...\n";
-
-  suite.run(result);
-
-  std::cout << "-----------------------------\n";
-  std::cout << "Summary:\n";
-
-  result.printSummary();
-  return 0;
+    void testRoundDown1(tst::TestResult& result);
+  };
 }
+
+
+#endif

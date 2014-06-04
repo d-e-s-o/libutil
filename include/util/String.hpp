@@ -23,8 +23,8 @@
 #include <cassert>
 
 #include <type/Types.hpp>
-#include <type/Misc.hpp>
 
+#include "util/Util.hpp"
 #include "util/Algorithm.hpp"
 
 
@@ -115,7 +115,7 @@ namespace utl
     // add one element to account for zero terminating byte
     auto len = length(src) + 1;
     // we must not copy more than the destination buffer can hold
-    auto max = typ::min(count, len);
+    auto max = min(count, len);
     auto end = copy(src, src + max, dst);
 
     // ensure zero termination in any case: in the normal case we did copy the zero terminating byte

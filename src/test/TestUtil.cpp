@@ -1,4 +1,4 @@
-// Test.cpp
+// TestUtil.cpp
 
 /***************************************************************************
  *   Copyright (C) 2014 Daniel Mueller (deso@posteo.net)                   *
@@ -17,34 +17,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include <iostream>
-
-#include <test/TestSuite.hpp>
-#include <test/DefaultResult.hpp>
+#include <util/Util.hpp>
 
 #include "TestUtil.hpp"
-#include "TestBits.hpp"
-#include "TestString.hpp"
-#include "TestAlgorithm.hpp"
 
 
-int main()
+namespace test
 {
-  tst::DefaultResult<std::ostream> result(std::cout, true);
-  tst::TestSuite                   suite;
+  TestUtil::TestUtil()
+    : tst::TestCase<TestUtil>(*this, "TestUtil")
+  {
+    add(&TestUtil::testRoundDown1);
+  }
 
-  suite.add(tst::createTestCase<test::TestUtil>());
-  suite.add(tst::createTestCase<test::TestBits>());
-  suite.add(tst::createTestCase<test::TestString>());
-  suite.add(tst::createTestCase<test::TestAlgorithm>());
-
-  std::cout << "Running Tests...\n";
-
-  suite.run(result);
-
-  std::cout << "-----------------------------\n";
-  std::cout << "Summary:\n";
-
-  result.printSummary();
-  return 0;
+  void TestUtil::testRoundDown1(tst::TestResult& result)
+  {
+    ASSERT(utl::roundDown(0x1fff, 0x1000) == 0x1000);
+    ASSERT(utl::roundDown(1, 0x1000) == 0);
+    ASSERT(utl::roundDown(5, 0x1000) == 0);
+    ASSERT(utl::roundDown(0x1000 - 1, 0x1000) == 0);
+    ASSERT(utl::roundDown(0x1000, 0x1000) == 0x1000);
+  }
 }

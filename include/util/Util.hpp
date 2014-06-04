@@ -20,6 +20,8 @@
 #ifndef UTLUTIL_HPP
 #define UTLUTIL_HPP
 
+#include <type/Types.hpp>
+
 
 namespace utl
 {
@@ -30,6 +32,24 @@ namespace utl
   constexpr T max(T first, T second);
 
   template<typename T>
+  constexpr T align2(T value, size_t alignment);
+
+  template<typename T>
+  constexpr T* align2(T* value, size_t alignment);
+
+  template<typename T>
+  constexpr T roundUp(T value, size_t multiple_of);
+
+  template<typename T>
+  constexpr T* roundUp(T* value, size_t multiple_of);
+
+  template<typename T>
+  constexpr T roundDown(T value, size_t multiple_of);
+
+  template<typename T>
+  constexpr T* roundDown(T* value, size_t multiple_of);
+
+  template<typename T>
   void swap(T& first, T& second);
 }
 
@@ -37,29 +57,79 @@ namespace utl
 namespace utl
 {
   /**
-   * @param first
-   * @param second
+   * @param value1 first value
+   * @param value2 second value
+   * @return minimum of the two given values
    */
   template<typename T>
   constexpr T min(T first, T second)
   {
-    return first < second ? first : second;
+    return first <= second ? first : second;
   }
 
   /**
-   * @param first
-   * @param second
+   * @param value1 first value
+   * @param value2 second value
+   * @return maximum of the two given values
    */
   template<typename T>
   constexpr T max(T first, T second)
   {
-    return first > second ? first : second;
+    return first >= second ? first : second;
+  }
+
+  /**
+   * @param value value to round up
+   * @param multiple_of round up to the next multiple of this value
+   * @return 'value' rounded up to the next multiple of 'multiple_of'
+   * @todo needs unit test!
+   */
+  template<typename T>
+  constexpr T roundUp(T value, size_t multiple_of)
+  {
+    return value + ((multiple_of - (value % multiple_of)) % multiple_of);
+  }
+
+  /**
+   * @param value value to round up
+   * @param multiple_of round up to the next multiple of this value
+   * @return 'value' rounded up to the next multiple of 'multiple_of'
+   */
+  template<typename T>
+  constexpr T* roundUp(T* value, size_t multiple_of)
+  {
+    return reinterpret_cast<T*>(roundUp(reinterpret_cast<byte_t const*>(value) -
+                                        reinterpret_cast<byte_t const*>(0), multiple_of));
+  }
+
+  /**
+   * @param value value to round down
+   * @param multiple_of round down to the next multiple of this value
+   * @return 'value' rounded down to the next multiple of 'multiple_of'
+   * @todo needs unit test!
+   */
+  template<typename T>
+  constexpr T roundDown(T value, size_t multiple_of)
+  {
+    return value - (value % multiple_of);
+  }
+
+  /**
+   * @param value value to round down
+   * @param multiple_of round down to the next multiple of this value
+   * @return 'value' rounded down to the next multiple of 'multiple_of'
+   */
+  template<typename T>
+  constexpr T* roundDown(T* value, size_t multiple_of)
+  {
+    return reinterpret_cast<T*>(roundDown(reinterpret_cast<byte_t const*>(value) -
+                                          reinterpret_cast<byte_t const*>(0), multiple_of));
   }
 
   /**
    * This function swaps the contents of 'first' with that of 'second'.
-   * @param first
-   * @param second
+   * @param first first variable to swap with second
+   * @param second second variable to swap with first
    */
   template<typename T>
   void swap(T& first, T& second)
