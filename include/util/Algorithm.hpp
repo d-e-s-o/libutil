@@ -26,6 +26,8 @@
 
 namespace utl
 {
+  template<typename Iterator1T, typename Iterator2T>
+  bool includes(Iterator1T begin, Iterator1T end, Iterator2T it);
 
   //template<typename IteratorT>
   //difference_t difference(IteratorT first, IteratorT second);
