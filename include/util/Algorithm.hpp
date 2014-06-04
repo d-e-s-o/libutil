@@ -101,18 +101,6 @@ namespace utl
   }
 
   /**
-   *
-   */
-  struct Assigner
-  {
-    template<typename InputIteratorT, typename OutputIteratorT>
-    void operator ()(InputIteratorT in, OutputIteratorT out) const
-    {
-      *out = *in;
-    }
-  };
-
-  /**
    * @todo we could pass references to iterators to this function, then Copy (the optimized
    *       version) could make better use of it
    */
@@ -144,7 +132,8 @@ namespace utl
   template<typename InputIteratorT, typename OutputIteratorT>
   inline void simpleCopy(InputIteratorT begin, InputIteratorT end, OutputIteratorT destination)
   {
-    simpleCopy(begin, end, destination, Assigner());
+    auto assign = [](InputIteratorT in, OutputIteratorT out) { *out = *in; };
+    simpleCopy(begin, end, destination, assign);
   }
 
   /**
