@@ -1,4 +1,4 @@
-// Test.cpp
+// TestOutStream.hpp
 
 /***************************************************************************
  *   Copyright (C) 2014 Daniel Mueller (deso@posteo.net)                   *
@@ -17,36 +17,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include <iostream>
+#ifndef TESTTESTOUTSTREAM_HPP
+#define TESTTESTOUTSTREAM_HPP
 
-#include <test/TestSuite.hpp>
-#include <test/DefaultResult.hpp>
-
-#include "TestUtil.hpp"
-#include "TestBits.hpp"
-#include "TestString.hpp"
-#include "TestAlgorithm.hpp"
-#include "TestOutStream.hpp"
+#include <test/TestCase.hpp>
 
 
-int main()
+namespace test
 {
-  tst::DefaultResult<std::ostream> result(std::cout, true);
-  tst::TestSuite                   suite;
+  class TestOutStream: public tst::TestCase<TestOutStream>
+  {
+  public:
+    TestOutStream();
 
-  suite.add(tst::createTestCase<test::TestUtil>());
-  suite.add(tst::createTestCase<test::TestBits>());
-  suite.add(tst::createTestCase<test::TestString>());
-  suite.add(tst::createTestCase<test::TestAlgorithm>());
-  suite.add(tst::createTestCase<test::TestOutStream>());
-
-  std::cout << "Running Tests...\n";
-
-  suite.run(result);
-
-  std::cout << "-----------------------------\n";
-  std::cout << "Summary:\n";
-
-  result.printSummary();
-  return 0;
+    void testOutput(tst::TestResult& result);
+  };
 }
+
+
+#endif

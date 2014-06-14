@@ -33,7 +33,8 @@ SRC_CXX_libutil_test  = Test.cpp\
                         TestUtil.cpp\
                         TestBits.cpp\
                         TestString.cpp\
-                        TestAlgorithm.cpp
+                        TestAlgorithm.cpp\
+                        TestOutStream.cpp
 
 CXXFLAGS_libutil_test = -I$(TARGET_DIR_libutil_test)/../../../libtype/include/\
                         -I$(TARGET_DIR_libutil_test)/../../../libtest/include/\
