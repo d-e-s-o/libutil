@@ -32,6 +32,9 @@ namespace utl
   constexpr T max(T first, T second);
 
   template<typename T>
+  constexpr T abs(T first, T second);
+
+  template<typename T>
   constexpr T align2(T value, size_t alignment);
 
   template<typename T>
@@ -76,6 +79,16 @@ namespace utl
   constexpr T max(T first, T second)
   {
     return first >= second ? first : second;
+  }
+
+  /**
+   * @param value some value
+   * @return absolute value of given value
+   */
+  template<typename T>
+  constexpr T abs(T value)
+  {
+    return value >= 0 ? value : -value;
   }
 
   /**
