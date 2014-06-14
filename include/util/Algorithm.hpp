@@ -20,9 +20,10 @@
 #ifndef UTLALGORITHM_HPP
 #define UTLALGORITHM_HPP
 
-#include <type/Types.hpp>
 #include <type/Move.hpp>
 #include <type/Traits.hpp>
+
+#include "util/Config.hpp"
 
 
 namespace utl

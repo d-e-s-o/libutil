@@ -22,8 +22,7 @@
 
 #include <cassert>
 
-#include <type/Types.hpp>
-
+#include "util/Config.hpp"
 #include "util/Util.hpp"
 #include "util/Algorithm.hpp"
 

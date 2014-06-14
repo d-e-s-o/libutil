@@ -20,7 +20,7 @@
 #ifndef UTLUTIL_HPP
 #define UTLUTIL_HPP
 
-#include <type/Types.hpp>
+#include "util/Config.hpp"
 
 
 namespace utl

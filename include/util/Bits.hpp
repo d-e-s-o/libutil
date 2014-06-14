@@ -20,8 +20,7 @@
 #ifndef UTLBITS_HPP
 #define UTLBITS_HPP
 
-#include <type/Types.hpp>
-#include <type/Util.hpp>
+#include "util/Config.hpp"
 
 
 namespace utl
