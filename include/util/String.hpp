@@ -20,10 +20,9 @@
 #ifndef UTLSTRING_HPP
 #define UTLSTRING_HPP
 
-#include <cassert>
-
 #include "util/Config.hpp"
 #include "util/Util.hpp"
+#include "util/Assert.hpp"
 #include "util/Algorithm.hpp"
 
 
@@ -49,7 +48,7 @@ namespace utl
   template<typename CharT>
   size_t length(CharT const* string)
   {
-    assert(string != nullptr);
+    ASSERT__(string != nullptr);
 
     size_t length = 0;
 
@@ -70,7 +69,7 @@ namespace utl
   template<typename CharT>
   int compare(CharT const* string1, CharT const* string2)
   {
-    assert(string1 != nullptr && string2 != nullptr);
+    ASSERT__(string1 != nullptr && string2 != nullptr);
 
     auto lhs_it = string1;
     auto rhs_it = string2;
