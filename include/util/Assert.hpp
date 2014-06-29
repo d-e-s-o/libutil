@@ -54,7 +54,8 @@ namespace utl
  * Clients can make use of this define to implement custom assertions.
  * @param condition_ condition to test
  * @param fail_function_ pointer to function to invoke in case the condition is not fulfilled
- * @note the signature of fail_function_ must match 'AssertFailFunction'
+ * @note 'fail_function_' should accept the same parameters as specified for 'AssertFailFunction',
+ *       it can be a lambda expression, however
  * @see utl::AssertFailFunction
  */
 #define ASSERT_IMPL(condition_, fail_function_)                  \
@@ -66,7 +67,8 @@ namespace utl
  * @param operation_ operation to invoke on 'first_' and 'second_'
  * @param second_ second parameter to the given operation
  * @param fail_function_ pointer to function to invoke in case the condition is not fulfilled
- * @note the signature of fail_function_ must match 'AssertFailFunction'
+ * @note 'fail_function_' should accept the same parameters as specified for 'AssertFailFunction',
+ *       it can be a lambda expression, however
  * @see utl::AssertFailFunction
  */
 #define ASSERTOP_IMPL(first_, operation_, second_, fail_function_)                  \
@@ -226,15 +228,17 @@ namespace utl
    * @param function a function name, retrieved using __FUNCTION__, for instance
    * @param line a line number, retrieved using __LINE__, for instance
    * @param fail_function pointer to a function to invoke in case the operation failed
+   * @note 'fail_function' should accept the same parameters as AssertFailFunction, however, it is
+   *       made a template to also potentially allow for lambda expressions etc.
    * @see Operation
    * @see AssertFailFunction
    */
-  template<typename OperationT>
+  template<typename OperationT, typename FailFunctionT>
   void assertOp(OperationT const& operation,
                 char const* file,
                 char const* function,
                 unsigned int line,
-                AssertFailFunction* fail_function)
+                FailFunctionT const& fail_function)
   {
     if (!operation())
     {
