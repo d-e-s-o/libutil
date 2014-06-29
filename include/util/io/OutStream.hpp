@@ -57,6 +57,8 @@ namespace utl
     void print(ulong_t value);
     void print(slong_t value);
 
+    void print(nullptr_t value);
+
     void setBase(uint8_t base);
     void setFixed(bool fixed);
 
@@ -302,6 +304,16 @@ namespace utl
   inline void OutStream<BufferT>::print(slong_t value)
   {
     printSignedValue(value);
+  }
+
+  template<typename BufferT>
+  inline void OutStream<BufferT>::print(nullptr_t value)
+  {
+    // @todo introduce printString or something similar
+    printChar('n');
+    printChar('u');
+    printChar('l');
+    printChar('l');
   }
 
   template<typename BufferT>
