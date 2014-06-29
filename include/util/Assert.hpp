@@ -30,6 +30,9 @@
 #ifndef UTLASSERT_HPP
 #define UTLASSERT_HPP
 
+#include <type/Types.hpp>
+#include <type/Traits.hpp>
+
 #include "util/Config.hpp"
 #include "util/io/OutStream.hpp"
 #include "util/io/MemoryBuffer.hpp"
@@ -66,20 +69,21 @@ namespace utl
  * @note the signature of fail_function_ must match 'AssertFailFunction'
  * @see utl::AssertFailFunction
  */
-#define ASSERTOP_IMPL(first_, operation_, second_, fail_function_)           \
-  /* invoke our 'assertOp' function which resides in namespace 'utl' */      \
-  utl::assertOp(                                                             \
-    /*                                                                       \
-     * Create our operation object. This is pretty tricky: 'operation_ is a  \
-     * string and we know it has to reference an object in namespace         \
-     * 'utl', so we paste them together. Also note that the object is        \
-     * a template, so we need to retrieve the types of the two arguments     \
-     * first.                                                                \
-     */                                                                      \
-    utl::operation_<decltype(first_), decltype(second_)>(first_, second_),   \
-    /* and of course the usual suspects in this context */                   \
-    __FILE__, __FUNCTION__, __LINE__,                                        \
-    fail_function_                                                           \
+#define ASSERTOP_IMPL(first_, operation_, second_, fail_function_)                  \
+  /* invoke our 'assertOp' function which resides in namespace 'utl' */             \
+  utl::assertOp(                                                                    \
+    /*                                                                              \
+     * Create our operation object. This is pretty tricky: 'operation_ is a         \
+     * string and we know it has to reference an object in namespace                \
+     * 'utl', so we paste them together. Also note that the object is               \
+     * a template, so we need to retrieve the types of the two arguments            \
+     * first.                                                                       \
+     */                                                                             \
+    utl::operation_<typ::RemoveReference<decltype(first_)>::Type,                   \
+                    typ::RemoveReference<decltype(second_)>::Type>(first_, second_),\
+    /* and of course the usual suspects in this context */                          \
+    __FILE__, __FUNCTION__, __LINE__,                                               \
+    fail_function_                                                                  \
   )
 
 
