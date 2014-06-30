@@ -30,6 +30,6 @@ namespace test
 
   void TestOutStream::testOutput(tst::TestResult& result)
   {
-    ASSERTM(false, "implement real test case");
+    TESTASSERTM(false, "implement real test case");
   }
 }

@@ -32,10 +32,10 @@ namespace test
 
   void TestUtil::testRoundDown1(tst::TestResult& result)
   {
-    ASSERT(utl::roundDown(0x1fff, 0x1000) == 0x1000);
-    ASSERT(utl::roundDown(1, 0x1000) == 0);
-    ASSERT(utl::roundDown(5, 0x1000) == 0);
-    ASSERT(utl::roundDown(0x1000 - 1, 0x1000) == 0);
-    ASSERT(utl::roundDown(0x1000, 0x1000) == 0x1000);
+    TESTASSERTOP(utl::roundDown(0x1fff, 0x1000), eq, 0x1000);
+    TESTASSERTOP(utl::roundDown(1, 0x1000), eq, 0);
+    TESTASSERTOP(utl::roundDown(5, 0x1000), eq, 0);
+    TESTASSERTOP(utl::roundDown(0x1000 - 1, 0x1000), eq, 0);
+    TESTASSERTOP(utl::roundDown(0x1000, 0x1000), eq, 0x1000);
   }
 }

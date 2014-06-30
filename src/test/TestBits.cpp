@@ -33,25 +33,25 @@ namespace test
 
   void TestBits::testRotateLeft1(tst::TestResult& result)
   {
-    ASSERT((utl::rotateLeft<uint32_t, 32>(1, 32) == 1));
-    ASSERT((utl::rotateLeft<uint32_t, 32>(2, 32) == 2));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(1, 20) == 1));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(2, 20) == 2));
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 32>(1, 32)), eq, 1);
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 32>(2, 32)), eq, 2);
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(1, 20)), eq, 1);
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(2, 20)), eq, 2);
 
-    ASSERT((utl::rotateLeft<uint32_t, 20>(0, 1)  == 0));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(0, 2)  == 0));
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(0, 1)), eq, 0);
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(0, 2)), eq, 0);
 
-    ASSERT((utl::rotateLeft<uint32_t, 20>(7, 2)  == 28));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(7, 2)  == 28));
-    ASSERT((utl::rotateLeft<uint32_t, 20>(1 << 19, 1) == 1));
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(7, 2)), eq, 28);
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(7, 2)), eq, 28);
+    TESTASSERTOP((utl::rotateLeft<uint32_t, 20>(1 << 19, 1)), eq, 1);
   }
 
   void TestBits::testRotateRight1(tst::TestResult& result)
   {
-    ASSERT((utl::rotateRight<uint32_t, 32>(1, 32) == 1));
-    ASSERT((utl::rotateRight<uint32_t, 32>(2, 32) == 2));
+    TESTASSERTOP((utl::rotateRight<uint32_t, 32>(1, 32)), eq, 1);
+    TESTASSERTOP((utl::rotateRight<uint32_t, 32>(2, 32)), eq, 2);
 
-    ASSERT((utl::rotateRight<uint32_t, 19>(1, 1) == 1 << 18));
-    ASSERT((utl::rotateRight<uint32_t, 19>(1, 2) == 1 << 17));
+    TESTASSERTOP((utl::rotateRight<uint32_t, 19>(1, 1)), eq, 1 << 18);
+    TESTASSERTOP((utl::rotateRight<uint32_t, 19>(1, 2)), eq, 1 << 17);
   }
 }

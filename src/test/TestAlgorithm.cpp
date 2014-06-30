@@ -95,10 +95,10 @@ namespace test
 
   void TestAlgorithm::testIncludes1(tst::TestResult& result)
   {
-    ASSERT( utl::includes(source_begin_, source_end_, source_begin_));
-    ASSERT( utl::includes(source_begin_, source_end_, source_begin_ + 1));
-    ASSERT( utl::includes(source_begin_, source_end_, source_end_));
-    ASSERT(!utl::includes(source_begin_, source_end_, source_end_ + 1));
+    TESTASSERT( utl::includes(source_begin_, source_end_, source_begin_));
+    TESTASSERT( utl::includes(source_begin_, source_end_, source_begin_ + 1));
+    TESTASSERT( utl::includes(source_begin_, source_end_, source_end_));
+    TESTASSERT(!utl::includes(source_begin_, source_end_, source_end_ + 1));
   }
 
   void TestAlgorithm::testIncludes2(tst::TestResult& result)
@@ -108,76 +108,76 @@ namespace test
     auto end    = iterator(source_end_);
     auto after  = iterator(source_end_ + 1);
 
-    ASSERT( utl::includes(source_begin_, source_end_, begin));
-    ASSERT( utl::includes(source_begin_, source_end_, middle));
-    ASSERT( utl::includes(source_begin_, source_end_, end));
-    ASSERT(!utl::includes(source_begin_, source_end_, after));
+    TESTASSERT( utl::includes(source_begin_, source_end_, begin));
+    TESTASSERT( utl::includes(source_begin_, source_end_, middle));
+    TESTASSERT( utl::includes(source_begin_, source_end_, end));
+    TESTASSERT(!utl::includes(source_begin_, source_end_, after));
 
-    ASSERT( utl::includes(begin, end, source_begin_));
-    ASSERT( utl::includes(begin, end, source_end_));
-    ASSERT(!utl::includes(begin, end, source_end_ + 1));
+    TESTASSERT( utl::includes(begin, end, source_begin_));
+    TESTASSERT( utl::includes(begin, end, source_end_));
+    TESTASSERT(!utl::includes(begin, end, source_end_ + 1));
   }
 
   void TestAlgorithm::testFill(tst::TestResult& result)
   {
-    ASSERT(utl::find(source_begin_, source_end_, 0) == source_begin_);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 0), eq, source_begin_);
 
     utl::fill(source_begin_, source_end_, 1);
-    ASSERT(utl::find(source_begin_, source_end_, 0) == source_end_);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 0), eq, source_end_);
 
     utl::fill(source_begin_ + 20, source_end_ - 70, 0);
-    ASSERT(utl::find(source_begin_,      source_end_, 0) == source_begin_ + 20);
-    ASSERT(utl::find(source_begin_ + 21, source_end_, 1) == source_end_ - 70);
+    TESTASSERTOP(utl::find(source_begin_,      source_end_, 0), eq, source_begin_ + 20);
+    TESTASSERTOP(utl::find(source_begin_ + 21, source_end_, 1), eq, source_end_ - 70);
   }
 
   void TestAlgorithm::testFind(tst::TestResult& result)
   {
-    ASSERT(utl::find(source_begin_, source_end_, 1) == source_end_);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 1), eq, source_end_);
 
     *(source_end_ - 1) = 1;
-    ASSERT(utl::find(source_begin_, source_end_, 1) == source_end_ - 1);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 1), eq, source_end_ - 1);
 
     *(source_end_ - 16) = 1;
-    ASSERT(utl::find(source_begin_, source_end_, 1) == source_end_ - 16);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 1), eq, source_end_ - 16);
 
     *(source_begin_ + 2) = 1;
-    ASSERT(utl::find(source_begin_, source_end_, 1) == source_begin_ + 2);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 1), eq, source_begin_ + 2);
 
     *(source_begin_) = 1;
-    ASSERT(utl::find(source_begin_, source_end_, 1) == source_begin_);
+    TESTASSERTOP(utl::find(source_begin_, source_end_, 1), eq, source_begin_);
 
-    ASSERT(utl::find(source_begin_ + 3, source_end_, 1) == source_end_ - 16);
+    TESTASSERTOP(utl::find(source_begin_ + 3, source_end_, 1), eq, source_end_ - 16);
   }
 
   void TestAlgorithm::testFindNot(tst::TestResult& result)
   {
-    ASSERT(utl::findNot(source_begin_, source_end_, 0) == source_end_);
+    TESTASSERTOP(utl::findNot(source_begin_, source_end_, 0), eq, source_end_);
 
     *(source_end_ - 1) = 1;
-    ASSERT(utl::findNot(source_begin_, source_end_, 0) == source_end_ - 1);
+    TESTASSERTOP(utl::findNot(source_begin_, source_end_, 0), eq, source_end_ - 1);
 
     *(source_end_ - 16) = 1;
-    ASSERT(utl::findNot(source_begin_, source_end_, 0) == source_end_ - 16);
+    TESTASSERTOP(utl::findNot(source_begin_, source_end_, 0), eq, source_end_ - 16);
 
     *(source_begin_ + 2) = 1;
-    ASSERT(utl::findNot(source_begin_, source_end_, 0) == source_begin_ + 2);
+    TESTASSERTOP(utl::findNot(source_begin_, source_end_, 0), eq, source_begin_ + 2);
 
     *(source_begin_) = 1;
-    ASSERT(utl::findNot(source_begin_, source_end_, 0) == source_begin_);
+    TESTASSERTOP(utl::findNot(source_begin_, source_end_, 0), eq, source_begin_);
 
-    ASSERT(utl::findNot(source_begin_ + 3, source_end_, 0) == source_end_ - 16);
+    TESTASSERTOP(utl::findNot(source_begin_ + 3, source_end_, 0), eq, source_end_ - 16);
   }
 
   void TestAlgorithm::testFindBinary1(tst::TestResult& result)
   {
     int* p = destination_begin_;
 
-    ASSERT(utl::findBinary(p, p, 0) == p);
+    TESTASSERTOP(utl::findBinary(p, p, 0), eq, p);
 
     *p = 1;
-    ASSERT(utl::findBinary(p, p + 1, 0) == p);
-    ASSERT(utl::findBinary(p, p + 1, 1) == p);
-    ASSERT(utl::findBinary(p, p + 1, 2) == p + 1);
+    TESTASSERTOP(utl::findBinary(p, p + 1, 0), eq, p);
+    TESTASSERTOP(utl::findBinary(p, p + 1, 1), eq, p);
+    TESTASSERTOP(utl::findBinary(p, p + 1, 2), eq, p + 1);
   }
 
   void TestAlgorithm::testFindBinary2(tst::TestResult& result)
@@ -191,38 +191,38 @@ namespace test
     *end++ = 2000;
     *end++ = 14444;
 
-    ASSERT(utl::findBinary(destination_begin_, end,     0) == destination_begin_);
-    ASSERT(utl::findBinary(destination_begin_, end,     1) == destination_begin_ + 1);
-    ASSERT(utl::findBinary(destination_begin_, end,     4) == destination_begin_ + 1);
-    ASSERT(utl::findBinary(destination_begin_, end,     7) == destination_begin_ + 1);
-    ASSERT(utl::findBinary(destination_begin_, end,     8) == destination_begin_ + 2);
-    ASSERT(utl::findBinary(destination_begin_, end,    12) == destination_begin_ + 2);
-    ASSERT(utl::findBinary(destination_begin_, end,    13) == destination_begin_ + 3);
-    ASSERT(utl::findBinary(destination_begin_, end,    15) == destination_begin_ + 3);
-    ASSERT(utl::findBinary(destination_begin_, end,    16) == destination_begin_ + 4);
-    ASSERT(utl::findBinary(destination_begin_, end,  1000) == destination_begin_ + 5);
-    ASSERT(utl::findBinary(destination_begin_, end,  2000) == destination_begin_ + 5);
-    ASSERT(utl::findBinary(destination_begin_, end,  2001) == destination_begin_ + 6);
-    ASSERT(utl::findBinary(destination_begin_, end, 14444) == destination_begin_ + 6);
-    ASSERT(utl::findBinary(destination_begin_, end, 30000) == destination_begin_ + 7);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,     0), eq, destination_begin_);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,     1), eq, destination_begin_ + 1);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,     4), eq, destination_begin_ + 1);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,     7), eq, destination_begin_ + 1);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,     8), eq, destination_begin_ + 2);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,    12), eq, destination_begin_ + 2);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,    13), eq, destination_begin_ + 3);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,    15), eq, destination_begin_ + 3);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,    16), eq, destination_begin_ + 4);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,  1000), eq, destination_begin_ + 5);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,  2000), eq, destination_begin_ + 5);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end,  2001), eq, destination_begin_ + 6);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end, 14444), eq, destination_begin_ + 6);
+    TESTASSERTOP(utl::findBinary(destination_begin_, end, 30000), eq, destination_begin_ + 7);
   }
 
   void TestAlgorithm::testCopy1(tst::TestResult& result)
   {
     // simply copy from src to dst
-    ASSERT(utl::find(destination_begin_, destination_end_, 0) == destination_begin_);
+    TESTASSERTOP(utl::find(destination_begin_, destination_end_, 0), eq, destination_begin_);
 
     utl::fill(source_begin_ + 1, source_end_ - 1, 1);
     utl::copy(source_begin_, source_end_, destination_begin_);
 
-    ASSERT(utl::find(destination_begin_,     destination_end_, 0) == destination_begin_);
-    ASSERT(utl::find(destination_begin_ + 1, destination_end_, 0) == destination_end_ - 1);
+    TESTASSERTOP(utl::find(destination_begin_,     destination_end_, 0), eq, destination_begin_);
+    TESTASSERTOP(utl::find(destination_begin_ + 1, destination_end_, 0), eq, destination_end_ - 1);
 
     // a small copy
     utl::fill(source_begin_, source_begin_ + 6, 0);
     utl::copy(source_begin_, source_begin_ + 6, destination_begin_);
 
-    ASSERT(utl::find(destination_begin_, destination_end_, 1) == destination_begin_ + 6);
+    TESTASSERTOP(utl::find(destination_begin_, destination_end_, 1), eq, destination_begin_ + 6);
   }
 
   void TestAlgorithm::testCopy2(tst::TestResult& result)
@@ -242,9 +242,9 @@ namespace test
       utl::copy(destination_begin_, destination_begin_ + RANGE_SIZE, destination_begin_ + overlap);
 
       for (int i = 0; i < RANGE_DIFF_SIZE; ++i)
-        ASSERT(destination_begin_[overlap + i] == OVERLAP_VALUE_START + i);
+        TESTASSERTOP(destination_begin_[overlap + i], eq, OVERLAP_VALUE_START + i);
 
-      ASSERT(destination_begin_[overlap + RANGE_DIFF_SIZE] == 0);
+      TESTASSERTOP(destination_begin_[overlap + RANGE_DIFF_SIZE], eq, 0);
 
       // clean up
       utl::fill(destination_begin_, destination_end_, 0);

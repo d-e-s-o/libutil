@@ -42,37 +42,37 @@ namespace test
 
   void TestString::testLength(tst::TestResult& result)
   {
-    ASSERT(utl::length("")   == 0);
-    ASSERT(utl::length("a")  == 1);
-    ASSERT(utl::length("b")  == 1);
-    ASSERT(utl::length("ab") == 2);
+    TESTASSERTOP(utl::length("")  , eq, 0);
+    TESTASSERTOP(utl::length("a") , eq, 1);
+    TESTASSERTOP(utl::length("b") , eq, 1);
+    TESTASSERTOP(utl::length("ab"), eq, 2);
 
-    ASSERT(utl::length(string1) == 2);
-    ASSERT(utl::length(string2) == 3);
+    TESTASSERTOP(utl::length(string1), eq, 2);
+    TESTASSERTOP(utl::length(string2), eq, 3);
   }
 
   void TestString::testCompareLess(tst::TestResult& result)
   {
-    ASSERT(utl::compare("",   "a") < 0);
-    ASSERT(utl::compare("a",  "b") < 0);
-    ASSERT(utl::compare("a",  "z") < 0);
-    ASSERT(utl::compare("ab", "z") < 0);
+    TESTASSERTOP(utl::compare("",   "a"), lt, 0);
+    TESTASSERTOP(utl::compare("a",  "b"), lt, 0);
+    TESTASSERTOP(utl::compare("a",  "z"), lt, 0);
+    TESTASSERTOP(utl::compare("ab", "z"), lt, 0);
 
-    ASSERT(utl::compare("aabb",  "aabbc") < 0);
-    ASSERT(utl::compare("aabbb", "aabbc") < 0);
+    TESTASSERTOP(utl::compare("aabb",  "aabbc"), lt, 0);
+    TESTASSERTOP(utl::compare("aabbb", "aabbc"), lt, 0);
 
-    ASSERT(utl::compare(string1, string2) < 0);
+    TESTASSERTOP(utl::compare(string1, string2), lt, 0);
   }
 
   void TestString::testCompareEqual(tst::TestResult& result)
   {
-    ASSERT(utl::compare("",  "")  == 0);
-    ASSERT(utl::compare("a", "a") == 0);
+    TESTASSERTOP(utl::compare("",  "") , eq, 0);
+    TESTASSERTOP(utl::compare("a", "a"), eq, 0);
 
-    ASSERT(utl::compare("azaz", "azaz") == 0);
+    TESTASSERTOP(utl::compare("azaz", "azaz"), eq, 0);
 
-    ASSERT(utl::compare(string1, string1) == 0);
-    ASSERT(utl::compare(string2, string2) == 0);
+    TESTASSERTOP(utl::compare(string1, string1), eq, 0);
+    TESTASSERTOP(utl::compare(string2, string2), eq, 0);
   }
 
   /**
@@ -83,19 +83,19 @@ namespace test
     char buffer[12] = {};
     size_t size = sizeof(buffer);
 
-    ASSERT(utl::copy("", buffer, size) == buffer + 1);
-    ASSERT(utl::compare(buffer, "") == 0);
+    TESTASSERTOP(utl::copy("", buffer, size), eq, buffer + 1);
+    TESTASSERTOP(utl::compare(buffer, ""), eq, 0);
 
-    ASSERT(utl::copy("abc", buffer, size) == buffer + 4);
-    ASSERT(utl::compare(buffer, "abc") == 0);
+    TESTASSERTOP(utl::copy("abc", buffer, size), eq, buffer + 4);
+    TESTASSERTOP(utl::compare(buffer, "abc"), eq, 0);
 
-    ASSERT(utl::copy("abcdefghijk", buffer, size) == buffer + size);
-    ASSERT(utl::compare(buffer, "abcdefghijk") == 0);
+    TESTASSERTOP(utl::copy("abcdefghijk", buffer, size), eq, buffer + size);
+    TESTASSERTOP(utl::compare(buffer, "abcdefghijk"), eq, 0);
 
-    ASSERT(utl::copy("abcdefghijkl", buffer, size) == buffer + size);
-    ASSERT(utl::compare(buffer, "abcdefghijk") == 0);
+    TESTASSERTOP(utl::copy("abcdefghijkl", buffer, size), eq, buffer + size);
+    TESTASSERTOP(utl::compare(buffer, "abcdefghijk"), eq, 0);
 
-    ASSERT(utl::copy("abcdefghijklmnopqrst", buffer, size) == buffer + size);
-    ASSERT(utl::compare(buffer, "abcdefghijk") == 0);
+    TESTASSERTOP(utl::copy("abcdefghijklmnopqrst", buffer, size), eq, buffer + size);
+    TESTASSERTOP(utl::compare(buffer, "abcdefghijk"), eq, 0);
   }
 }
