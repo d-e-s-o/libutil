@@ -39,14 +39,14 @@ extern "C" void __assert_fail(char const* assertion,
                               char const* file,
                               unsigned int line,
                               char const* function);
-#  define ASSERT__(condition_)\
+#  define ASSERT(condition_)\
      ASSERT_IMPL(condition_, __assert_fail)
 #  define ASSERTOP(first_, operation_, second_)\
      ASSERTOP_IMPL(first_, operation_, second_, __assert_fail)
 #  define ASSERT_STATIC(condition_)\
      static_assert(condition_, "\"" #condition_ "\" failed")
 #else
-#  define ASSERT__(condition_)
+#  define ASSERT(condition_)
 #  define ASSERTOP(first_, operation_, second_)
 #  define ASSERT_STATIC(condition_)
 #endif

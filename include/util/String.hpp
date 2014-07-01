@@ -48,7 +48,7 @@ namespace utl
   template<typename CharT>
   size_t length(CharT const* string)
   {
-    ASSERT__(string != nullptr);
+    ASSERTOP(string, ne, nullptr);
 
     size_t length = 0;
 
@@ -69,7 +69,8 @@ namespace utl
   template<typename CharT>
   int compare(CharT const* string1, CharT const* string2)
   {
-    ASSERT__(string1 != nullptr && string2 != nullptr);
+    ASSERTOP(string1, ne, nullptr);
+    ASSERTOP(string2, ne, nullptr);
 
     auto lhs_it = string1;
     auto rhs_it = string2;
