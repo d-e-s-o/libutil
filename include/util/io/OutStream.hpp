@@ -335,7 +335,10 @@ namespace utl
   template<typename T>
   inline void OutStream<BufferT>::printUnsignedValue(T value)
   {
-    printUnsignedValueImpl<typename typ::MakeUnsigned<T>::Type>(value);
+    typedef typename typ::MakeUnsigned<T>::Type Type1;
+    typedef typename typ::RemoveConst<Type1>::Type Type2;
+
+    printUnsignedValueImpl<Type2>(value);
   }
 
   template<typename BufferT>
