@@ -97,7 +97,7 @@ namespace utl
      * @todo move into libtype or a more publicly accessible header once required somewhere else
      */
     template<typename T>
-    constexpr T const& removeRvalueReference(T&& t)
+    constexpr T const& makeLvalue(T&& t)
     {
       return t;
     }
@@ -111,12 +111,17 @@ namespace utl
   template<typename Iterator1T, typename Iterator2T>
   bool includes(Iterator1T begin, Iterator1T end, Iterator2T it)
   {
-    typedef typename typ::RemoveReference<decltype(*begin)>::Type T1;
-    typedef typename typ::RemoveReference<decltype(*it)>::Type T2;
+    typedef typename typ::RemoveReference<
+            typename typ::RemoveRvalueReference< decltype(*begin)>::Type>::Type T1;
+    typedef typename typ::RemoveReference<
+            typename typ::RemoveRvalueReference< decltype(*it)>::Type>::Type T2;
 
-    T1 const* new_begin = &impl::removeRvalueReference(*begin);
-    T1 const* new_end   = &impl::removeRvalueReference(*end);
-    T2 const* new_it    = &impl::removeRvalueReference(*it);
+    // Note that we need to use operator * and operator & on the iterator to
+    // correctly handle overloaded versions of them. To make this work we need
+    // to convert the value return from operator * to an L-value.
+    T1 const* new_begin = &impl::makeLvalue(*begin);
+    T1 const* new_end   = &impl::makeLvalue(*end);
+    T2 const* new_it    = &impl::makeLvalue(*it);
     return includesImpl(new_begin, new_end, new_it);
   }
 
