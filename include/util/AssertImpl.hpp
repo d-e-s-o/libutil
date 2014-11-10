@@ -174,25 +174,6 @@ namespace utl
 
 
   /**
-   * @todo add a description and explain why this class is required etc.
-   * @todo remove this class once we got rid of the requirement to provide a Writer object to
-   *       MemoryBuffer
-   */
-  struct NoWrite
-  {
-    /**
-     * @param buffer some buffer containing the data to write
-     * @param count number of elements in 'buffer'
-     * @return true on success, false otherwise
-     */
-    bool operator()(byte_t const* buffer, size_t count) const
-    {
-      return true;
-    }
-  };
-
-
-  /**
    * @param operation the operation to execute
    * @param file a file name, retrieved using __FILE__, for instance
    * @param function a function name, retrieved using __FUNCTION__, for instance

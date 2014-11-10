@@ -27,6 +27,25 @@
 namespace utl
 {
   /**
+   * @todo add a description and explain why this class is required etc.
+   * @todo remove this class once we got rid of the requirement to provide a Writer object to
+   *       MemoryBuffer
+   */
+  struct NoWrite
+  {
+    /**
+     * @param buffer some buffer
+     * @param count number of elements in 'buffer'
+     * @return true
+     */
+    bool operator()(byte_t const* buffer, size_t count) const
+    {
+      return true;
+    }
+  };
+
+
+  /**
    * This class implements the StreamBuffer interface for a region of memory.
    * @see StreamBuffer
    * @todo think about exposing the BufferSize parameter
