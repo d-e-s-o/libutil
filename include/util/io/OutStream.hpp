@@ -24,6 +24,7 @@
 #include <type/Traits.hpp>
 
 #include "util/Config.hpp"
+#include "util/io/StreamBuffer.hpp"
 
 
 namespace utl
@@ -35,11 +36,10 @@ namespace utl
    * @todo think about removing flush functionality or at least creating a derived class that
    *       provides it
    */
-  template<typename BufferT>
   class OutStream
   {
   public:
-    OutStream(BufferT& buffer);
+    OutStream(StreamBuffer& buffer);
 
     void print(char const* value);
     void print(void const* value);
@@ -65,7 +65,7 @@ namespace utl
     void flush();
 
   private:
-    BufferT* buffer_;
+    StreamBuffer* buffer_;
 
     uint8_t base_;
     bool fixed_;
@@ -83,29 +83,17 @@ namespace utl
   };
 
 
-  template<typename BufferT>
-  OutStream<BufferT>& bin(OutStream<BufferT>& stream);
+  OutStream& bin(OutStream& stream);
+  OutStream& oct(OutStream& stream);
+  OutStream& dec(OutStream& stream);
+  OutStream& hex(OutStream& stream);
+  OutStream& fix(OutStream& stream);
+  OutStream& var(OutStream& stream);
 
-  template<typename BufferT>
-  OutStream<BufferT>& oct(OutStream<BufferT>& stream);
+  OutStream& flush(OutStream& stream);
 
-  template<typename BufferT>
-  OutStream<BufferT>& dec(OutStream<BufferT>& stream);
-
-  template<typename BufferT>
-  OutStream<BufferT>& hex(OutStream<BufferT>& stream);
-
-  template<typename BufferT>
-  OutStream<BufferT>& fix(OutStream<BufferT>& stream);
-
-  template<typename BufferT>
-  OutStream<BufferT>& var(OutStream<BufferT>& stream);
-
-  template<typename BufferT>
-  OutStream<BufferT>& flush(OutStream<BufferT>& stream);
-
-  template<typename BufferT, typename T>
-  OutStream<BufferT>& operator << (OutStream<BufferT>& stream, T value);
+  template<typename T>
+  OutStream& operator << (OutStream& stream, T value);
 }
 
 
@@ -230,84 +218,71 @@ namespace utl
   /**
    * @param buffer buffer to be used
    */
-  template<typename BufferT>
-  inline OutStream<BufferT>::OutStream(BufferT& buffer)
+  inline OutStream::OutStream(StreamBuffer& buffer)
     : buffer_(&buffer),
       base_(BASE_DECIMAL),
       fixed_(false)
   {
   }
 
-  template<typename BufferT>
-  void OutStream<BufferT>::print(char const* value)
+  inline void OutStream::print(char const* value)
   {
     for ( ; *value != '\0'; ++value)
       print(*value);
   }
 
-  template<typename BufferT>
-  void OutStream<BufferT>::print(void const* value)
+  inline void OutStream::print(void const* value)
   {
     printUnsignedValue(reinterpret_cast<byte_t const*>(value) -
                        reinterpret_cast<byte_t const*>(0));
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(char value)
+  inline void OutStream::print(char value)
   {
     printChar(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(uchar_t value)
+  inline void OutStream::print(uchar_t value)
   {
     printUnsignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(schar_t value)
+  inline void OutStream::print(schar_t value)
   {
     printSignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(ushort_t value)
+  inline void OutStream::print(ushort_t value)
   {
     printUnsignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(sshort_t value)
+  inline void OutStream::print(sshort_t value)
   {
     printSignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(uint_t value)
+  inline void OutStream::print(uint_t value)
   {
     printUnsignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(sint_t value)
+  inline void OutStream::print(sint_t value)
   {
     printSignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(ulong_t value)
+  inline void OutStream::print(ulong_t value)
   {
     printUnsignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(slong_t value)
+  inline void OutStream::print(slong_t value)
   {
     printSignedValue(value);
   }
 
-  template<typename BufferT>
-  inline void OutStream<BufferT>::print(nullptr_t value)
+  inline void OutStream::print(nullptr_t value)
   {
     // @todo introduce printString or something similar
     printChar('n');
@@ -316,9 +291,8 @@ namespace utl
     printChar('l');
   }
 
-  template<typename BufferT>
   template<typename T>
-  void OutStream<BufferT>::printSignedValue(T value)
+  void OutStream::printSignedValue(T value)
   {
     if (value < 0)
     {
@@ -331,9 +305,8 @@ namespace utl
   /**
    * @param value value to print
    */
-  template<typename BufferT>
   template<typename T>
-  inline void OutStream<BufferT>::printUnsignedValue(T value)
+  inline void OutStream::printUnsignedValue(T value)
   {
     typedef typename typ::MakeUnsigned<T>::Type Type1;
     typedef typename typ::RemoveConst<Type1>::Type Type2;
@@ -341,9 +314,8 @@ namespace utl
     printUnsignedValueImpl<Type2>(value);
   }
 
-  template<typename BufferT>
   template<typename T>
-  void OutStream<BufferT>::printUnsignedValueImpl(T value)
+  void OutStream::printUnsignedValueImpl(T value)
   {
     if (!fixed_ && value == 0)
     {
@@ -373,8 +345,7 @@ namespace utl
    * This helper method prints out a single character.
    * @param c character to print
    */
-  template<typename BufferT>
-  inline void OutStream<BufferT>::printChar(char c)
+  inline void OutStream::printChar(char c)
   {
     buffer_->put(c);
   }
@@ -382,8 +353,7 @@ namespace utl
   /**
    * @param base new base to set
    */
-  template<typename BufferT>
-  inline void OutStream<BufferT>::setBase(uint8_t base)
+  inline void OutStream::setBase(uint8_t base)
   {
     if (BASE_MIN < base && base < BASE_MAX)
       base_ = base;
@@ -393,8 +363,7 @@ namespace utl
    * @param fixed true to make all output have fixed width according to data type, false to make it
    *        variable according to value
    */
-  template<typename BufferT>
-  inline void OutStream<BufferT>::setFixed(bool fixed)
+  inline void OutStream::setFixed(bool fixed)
   {
     fixed_ = fixed;
   }
@@ -402,8 +371,7 @@ namespace utl
   /**
    *
    */
-  template<typename BufferT>
-  inline void OutStream<BufferT>::flush()
+  inline void OutStream::flush()
   {
     buffer_->flush();
   }
@@ -411,8 +379,7 @@ namespace utl
   /**
    * This manipulator can be used for setting binary output.
    */
-  template<typename BufferT>
-  OutStream<BufferT>& bin(OutStream<BufferT>& stream)
+  inline OutStream& bin(OutStream& stream)
   {
     stream.setBase(BASE_BINARY);
     return stream;
@@ -421,8 +388,7 @@ namespace utl
   /**
    * This manipulator can be used for setting octal output.
    */
-  template<typename BufferT>
-  OutStream<BufferT>& oct(OutStream<BufferT>& stream)
+  inline OutStream& oct(OutStream& stream)
   {
     stream.setBase(BASE_OCTAL);
     return stream;
@@ -431,8 +397,7 @@ namespace utl
   /**
    * This manipulator can be used for setting decimal output.
    */
-  template<typename BufferT>
-  OutStream<BufferT>& dec(OutStream<BufferT>& stream)
+  inline OutStream& dec(OutStream& stream)
   {
     stream.setBase(BASE_DECIMAL);
     return stream;
@@ -441,8 +406,7 @@ namespace utl
   /**
    * This manipulator can be used for setting hexadecimal output.
    */
-  template<typename BufferT>
-  OutStream<BufferT>& hex(OutStream<BufferT>& stream)
+  inline OutStream& hex(OutStream& stream)
   {
     stream.setBase(BASE_HEXADECIMAL);
     return stream;
@@ -452,8 +416,7 @@ namespace utl
    * This manipulator can be used for setting fixed output width.
    * @see OutStream::setFixed
    */
-  template<typename BufferT>
-  OutStream<BufferT>& fix(OutStream<BufferT>& stream)
+  inline OutStream& fix(OutStream& stream)
   {
     stream.setFixed(true);
     return stream;
@@ -463,8 +426,7 @@ namespace utl
    * This manipulator can be used for setting variable output width.
    * @see OutStream::setFixed
    */
-  template<typename BufferT>
-  OutStream<BufferT>& var(OutStream<BufferT>& stream)
+  inline OutStream& var(OutStream& stream)
   {
     stream.setFixed(false);
     return stream;
@@ -473,8 +435,7 @@ namespace utl
   /**
    *
    */
-  template<typename BufferT>
-  OutStream<BufferT>& flushl(OutStream<BufferT>& stream)
+  inline OutStream& flushl(OutStream& stream)
   {
     stream.print('\n');
     stream.flush();
@@ -484,8 +445,7 @@ namespace utl
   /**
    *
    */
-  template<typename BufferT>
-  OutStream<BufferT>& flush(OutStream<BufferT>& stream)
+  inline OutStream& flush(OutStream& stream)
   {
     stream.flush();
     return stream;
@@ -497,8 +457,8 @@ namespace utl
    * @param value value to print
    * @return stream that was supplied
    */
-  template<typename BufferT, typename T>
-  inline OutStream<BufferT>& operator << (OutStream<BufferT>& stream, T value)
+  template<typename T>
+  inline OutStream& operator << (OutStream& stream, T value)
   {
     stream.print(value);
     return stream;
@@ -511,10 +471,7 @@ namespace utl
    * @param manipulator manipulator to invoke
    * @return stream that was supplied
    */
-  template<typename BufferT>
-  inline OutStream<BufferT>&
-  operator << (OutStream<BufferT>& stream,
-               OutStream<BufferT>& (*manipulator)(OutStream<BufferT>&))
+  inline OutStream& operator << (OutStream& stream, OutStream& (*manipulator)(OutStream&))
   {
     return (*manipulator)(stream);
   }

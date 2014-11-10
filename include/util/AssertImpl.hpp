@@ -139,8 +139,7 @@ namespace utl
     /**
      * @param stream stream to which to write string representation of operation
      */
-    template<typename BufferT>
-    void write(utl::OutStream<BufferT>& stream) const
+    void write(utl::OutStream& stream) const
     {
       stream << *value1_ << OperationT().operation() << *value2_ << utl::flushl;
     }
@@ -194,7 +193,7 @@ namespace utl
     if (!operation())
     {
       typedef utl::MemoryBuffer<256, NoWrite> Buffer;
-      typedef utl::OutStream<Buffer> Stream;
+      typedef utl::OutStream Stream;
 
       NoWrite writer;
       Buffer buffer(writer);
