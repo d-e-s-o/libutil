@@ -36,12 +36,12 @@ namespace utl
   {
   public:
     StreamBuffer() = default;
-    StreamBuffer(StreamBuffer&&) = delete;
+    StreamBuffer(StreamBuffer&&) = default;
     StreamBuffer(StreamBuffer const&) = delete;
 
     virtual ~StreamBuffer() = default;
 
-    StreamBuffer& operator =(StreamBuffer&&) = delete;
+    StreamBuffer& operator =(StreamBuffer&&) = default;
     StreamBuffer& operator =(StreamBuffer const&) = delete;
 
     virtual void put(byte_t element) = 0;
