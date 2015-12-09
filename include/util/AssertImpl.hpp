@@ -141,7 +141,7 @@ namespace utl
      */
     void write(utl::OutStream& stream) const
     {
-      stream << *value1_ << OperationT().operation() << *value2_;
+      stream << *value1_ << ' ' << OperationT().operation() << ' ' << *value2_;
     }
 
   private:
